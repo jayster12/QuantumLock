@@ -19,6 +19,10 @@ def closeDBConnection(exception=None):
 def index():
     return render_template("index.html")
 
+@app.route('/generate', methods=['GET'])
+def generatePassword():
+    return render_template('passwordgenerator.html')
+
 @app.route('/add-password', methods=['POST'])
 def addPassword():
     print("Adding password entry...")
@@ -39,7 +43,16 @@ def addPassword():
     # Return with succeess message
     return render_template('vault.html', success_message='Password entry added!', username=entryUsername, email=session['email'])
 
-
+@app.route('/delete-password', methods=['POST'])
+def deletePassword():
+    entryID = request.form['entryID']
+    conn = createDBConnection()
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM passwordEntries WHERE id=?', (entryID,))
+    conn.commit()
+    conn.close()
+    
+    return render_template('vault.html', success_message='Entry deleted!', username=session['username'], email=session['email'])
 
 
 @app.route("/dashboard")
@@ -51,12 +64,23 @@ def dashboard():
         cursor = conn.cursor()
         cursor.execute('SELECT email FROM users WHERE username = ?', (username,))
         user = cursor.fetchone()
-        conn.close()
+        
         if user:
             email = user['email']
-            return render_template('vault.html', username=username, email=email) # Render the dashboard template with the user's username and email
+            #return render_template('vault.html', username=username, email=email) # Render the dashboard template with the user's username and email
+
+        # Retrieving stored passwords
+        cursor.execute('SELECT title, username, password, description, id FROM passwordEntries WHERE user_id=?', (session['id'],))
+        passEntries = cursor.fetchall()
+        conn.close()
+        print('rendering template...')
+        return render_template('vault.html', username=username, email=email, passEntries=passEntries) # pass the username & email to render on template
+
+    
     else:
-        return redirect(url_for('login'))
+        #return redirect(url_for('login'))
+        return render_template('login.html')
+    return render_template('login.html')
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():

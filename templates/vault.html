@@ -43,7 +43,7 @@
     <!-- Navigation bar -->
     <nav class="bg-blue-500 p-4">
         <div class="container mx-auto flex justify-between items-center relative">
-            <h1 class="text-white font-semibold">Password Manager</h1>
+            <h1 class="text-white font-semibold">Password Manager</h1>        
             <!-- User dropdown menu -->
             <div class="relative">
                 <button class="text-white hover:text-gray-200 focus:outline-none">
@@ -55,6 +55,7 @@
                     <a href="/profile" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Profile</a>
                     <a href="/settings" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Settings</a>
                     <a href="/logout" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Logout</a>
+                    <a href="/generate" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Password Generator</a>
                 </div>
             </div>
         </div>
@@ -79,16 +80,16 @@
                     </svg>
                 </button>
             </h2>
+            {% if success_message %}
+                <p style="color: green;">{{ success_message }}</p>
+             {% endif %}
+
+            {% if error_message %}
+                <p style="color: red;">{{ error_message }}</p>
+            {% endif %}
             <div id="passwordMenu", class="hidden absolute z-10 right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                 <form class="px-4 py-3" method="POST" action="add-password">
                     <div>
-                        {% if success_message %}
-                            <p style="color: green;">{{ success_message }}</p>
-                        {% endif %}
-
-                        {% if error_message %}
-                            <p style="color: red;">{{ error_message }}</p>
-                        {% endif %}
                         <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
                         <input type="text" id="title" name="title" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                     </div>
@@ -109,25 +110,28 @@
                             Submit
                         </button>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="passwordList">
-                <!-- Password items will be dynamically generated here by Flask -->
-                {% for password in stored_passwords %}
-                <div class="bg-white p-4 rounded-lg shadow">
-                    <div class="flex justify-between items-center mb-2">
-                        <div>
-                            <p class="font-semibold">Website: {{ password.website }}</p>
-                            <p class="text-sm text-gray-600">Username: {{ password.username }}</p>
-                        </div>
-                        <div>
-                            <button class="bg-blue-500 text-white px-3 py-1 rounded-lg focus:outline-none">Edit</button>
-                            <button class="bg-red-500 text-white px-3 py-1 rounded-lg focus:outline-none">Delete</button>
-                        </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="passwordList">
+            <!-- Password items will be dynamically generated here by Flask -->
+            {% for entry in passEntries %}
+            <div class="bg-white p-4 rounded-lg shadow">
+                <div class="flex justify-between items-center mb-2">
+                    <div>
+                        <p class="font-semibold">Website: {{ entry[0] }}</p>
+                        <p class="text-sm text-gray-600">Username: {{ entry[1] }}</p>
                     </div>
-                    <p class="text-sm"><span class="font-semibold">Password:</span> **********</p>
-                    <p class="text-sm mt-2"><span class="font-semibold">Notes:</span> {{ password.notes }}</p>
+                    <div>
+                        <form action="/delete-password" method="POST">
+                            <input type="hidden" name="entryID" value= "{{ entry[4] }}">
+                            <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded-lg focus:outline-none">Edit</button>
+                            <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded-lg focus:outline-none">Delete</button>
+                        </form>
+                    </div>
                 </div>
-                {% endfor %}
+                <p class="text-sm text-gray-600">Password: {{ entry[2] }}</p>
+                <p class="text-sm text-gray-600">Notes: {{ entry[3] }}</p>
             </div>
+            {% endfor %}
         </div>
     </div>
 
