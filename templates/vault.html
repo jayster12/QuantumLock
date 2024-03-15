@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Password Manager</title>
+    <!-- Include Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Custom CSS for dropdown menu */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            display: none;
+            z-index: 1000;
+        }
+        .dropdown-menu.active {
+            display: block;
+        }
+        body {
+            background-color: #1a202c;
+        }
+
+        .passwordMenu {
+            position: absolute;
+            z-index: 10;
+            right:50px;
+            top: 40px;
+            width: 200px;
+            background-color: #fff;
+            border-radius: 0.375rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display:none;
+        }
+
+        .passwordMenu.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-200">
+    <!-- Navigation bar -->
+    <nav class="bg-blue-500 p-4">
+        <div class="container mx-auto flex justify-between items-center relative">
+            <h1 class="text-white font-semibold">Password Manager</h1>
+            <!-- User dropdown menu -->
+            <div class="relative">
+                <button class="text-white hover:text-gray-200 focus:outline-none">
+                    <span class="mr-1">Welcome, {{ username }}</span>
+                    <svg class="h-4 w-4 fill-current inline-block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 7.293a1 1 0 0 1 1.414-1.414L10 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414l-5 5a1 1 0 0 1-1.414 0l-5-5a1 1 0 0 1-.001-1.414z"/></svg>
+                </button>
+                <!-- Dropdown menu content -->
+                <div class="dropdown-menu bg-white rounded-lg shadow-lg absolute top-full left-0">
+                    <a href="/profile" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Profile</a>
+                    <a href="/settings" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Settings</a>
+                    <a href="/logout" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main content area -->
+    <div class="container mx-auto mt-4">
+        <!-- User info -->
+        <div class="mb-8">
+            <h2 class="text-lg font-semibold mb-2">User Info</h2>
+            <p><span class="font-semibold">Email:</span> {{ username }}</p>
+            <p><span class="font-semibold">Username:</span> {{ email }}</p>
+        </div>
+        
+        <!-- Passwords -->
+        <div>
+            <h2 class="text-lg font-semibold mb-2 flex justify-between items-center">
+                Stored Passwords
+                <button id="addPasswordBtn" class="bg-blue-500 text-white px-3 py-1 rounded-full focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                </button>
+            </h2>
+            <div id="passwordMenu", class="hidden absolute z-10 right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                <form class="px-4 py-3" method="POST" action="add-password">
+                    <div>
+                        {% if success_message %}
+                            <p style="color: green;">{{ success_message }}</p>
+                        {% endif %}
+
+                        {% if error_message %}
+                            <p style="color: red;">{{ error_message }}</p>
+                        {% endif %}
+                        <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+                        <input type="text" id="title" name="title" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    </div>
+                    <div class="mt-2">
+                        <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                        <input type="text" id="username" name="username" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    </div>
+                    <div class="mt-2">
+                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <input type="password" id="password" name="password" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    </div>
+                    <div class="mt-2">
+                        <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                        <textarea id="description" name="description" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></textarea>
+                    </div>
+                    <div class="mt-4">
+                        <button type="submit" class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Submit
+                        </button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="passwordList">
+                <!-- Password items will be dynamically generated here by Flask -->
+                {% for password in stored_passwords %}
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <div class="flex justify-between items-center mb-2">
+                        <div>
+                            <p class="font-semibold">Website: {{ password.website }}</p>
+                            <p class="text-sm text-gray-600">Username: {{ password.username }}</p>
+                        </div>
+                        <div>
+                            <button class="bg-blue-500 text-white px-3 py-1 rounded-lg focus:outline-none">Edit</button>
+                            <button class="bg-red-500 text-white px-3 py-1 rounded-lg focus:outline-none">Delete</button>
+                        </div>
+                    </div>
+                    <p class="text-sm"><span class="font-semibold">Password:</span> **********</p>
+                    <p class="text-sm mt-2"><span class="font-semibold">Notes:</span> {{ password.notes }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Script to handle dropdown menu -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dropdownBtn = document.querySelector('.relative > button');
+            const dropdownMenu = document.querySelector('.dropdown-menu');
+
+            dropdownBtn.addEventListener('click', function () {
+                dropdownMenu.classList.toggle('active');
+            });
+
+            // Close dropdown menu when clicking outside
+            document.addEventListener('click', function (event) {
+                if (!dropdownBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.classList.remove('active');
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const addPasswordBtn = document.getElementById('addPasswordBtn');
+            const passwordMenu = document.getElementById('passwordMenu');
+
+            addPasswordBtn.addEventListener('click', function () {
+                passwordMenu.classList.toggle('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
