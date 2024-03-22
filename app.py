@@ -25,35 +25,45 @@ def generatePassword():
 
 @app.route('/add-password', methods=['POST'])
 def addPassword():
-    print("Adding password entry...")
     # Extracting the password entry elements from HTML
     entryTitle = request.form['title']
     entryUsername = request.form['username']
     entryPassword = request.form['password']
     entryDescription = request.form['description']
-    userID = session['id'] # Extract user ID from session
+    # Avoid adding password entry if it has an empty username or password
+    if len(entryUsername) == 0 or len(entryPassword) == 0:
+        print("Possible empty password entry. Ignoring")
+        return redirect(url_for('dashboard'))
+    else:
+        print("Adding password entry...")
+        userID = session['id'] # Extract user ID from session
+        # Insert password entry into database
+        conn = createDBConnection()
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO passwordEntries (user_id, title, username, password, description) VALUES (?, ?, ?, ?, ?)', (userID, entryTitle, entryUsername, entryPassword, entryDescription))
+        conn.commit()
+        conn.close()
+        # Return with succeess message
+        #return render_template('vault.html', success_message='Password entry added!', username=entryUsername, email=session['email'])
+        return redirect(url_for('dashboard')) # No success message, we just refresh the page essentially
 
-    # Insert password entry into database
-    conn = createDBConnection()
-    cursor = conn.cursor()
-    cursor.execute('INSERT INTO passwordEntries (user_id, title, username, password, description) VALUES (?, ?, ?, ?, ?)', (userID, entryTitle, entryUsername, entryPassword, entryDescription))
-    conn.commit()
-    conn.close()
-
-    # Return with succeess message
-    return render_template('vault.html', success_message='Password entry added!', username=entryUsername, email=session['email'])
-
+# For some reason, when deleting password entries, it adds a blank/empty one, so may want to remove/disable this feature for now
 @app.route('/delete-password', methods=['POST'])
 def deletePassword():
-    entryID = request.form['entryID']
-    conn = createDBConnection()
-    cursor = conn.cursor()
-    cursor.execute('DELETE FROM passwordEntries WHERE id=?', (entryID,))
-    conn.commit()
-    conn.close()
+    try:
+        entryID = int(request.form['entryID'])
+        print('Attempting to delete {0}'.format(entryID))
+        conn = createDBConnection()
+        cursor = conn.cursor()
+        cursor.execute('DELETE FROM passwordEntries WHERE id=?', (entryID,))
     
-    return render_template('vault.html', success_message='Entry deleted!', username=session['username'], email=session['email'])
-
+        conn.commit()
+        conn.close()
+    
+        return redirect(url_for('dashboard'))
+    except Exception as e:
+        print("Error encountered while deleting password entry ID {0}".format(entryID))
+        return redirect(url_for('dashboard'))
 
 @app.route("/dashboard")
 def dashboard():
@@ -109,6 +119,16 @@ def login():
                 return redirect(url_for('dashboard'))
             else:
                 return render_template('login.html')
+@app.route("/profile", methods=['GET'])
+def profile():
+    if request.method == 'GET':
+        return render_template('profile.html')
+
+
+@app.route("/settings", methods=['GET'])
+def settings():
+    if request.method == 'GET':
+        return render_template('settings.html')
 
 @app.route("/register", methods=['GET', 'POST'])
 # Function isn't properly registering users & inserting them into sqlite3 database for some reason.
