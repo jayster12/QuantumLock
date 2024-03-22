@@ -107,7 +107,7 @@ def login():
             # We assign the user ID & username to the user's session
             session['id'] = user[0]
             session['username'] = username # We assign the username to the user's session cookie
-            session['email'] = user[1] # Not 100% sure if the 1 index is the user's email address, ngl
+            session['email'] = user[2] # Not 100% sure if the 2nd index is the user's email address, ngl
             return redirect(url_for('dashboard')) # Redirect to dashboard if the user authenticates successfully
         # Credentials were incorrect
         else:
@@ -122,10 +122,40 @@ def login():
 @app.route("/profile", methods=['GET'])
 def profile():
     if request.method == 'GET':
-        #return render_template('profile.html', username=session['username'], email=session['email'])
         return render_template('profile.html', user=session)
-        #return render_template('profile.html')
 
+@app.route("/change-password", methods=['POST'])
+def changePassword():
+    currentPassword = request.form['currentPassword']
+    newPassword = request.form['newPassword']
+    newPasswordConfirm = request.form['confirmNewPassword']
+    userID = request.form['userID']
+
+    # Check if new inputted password matches the inputted password confirmation
+    if newPassword != newPasswordConfirm:
+        print("[!] Password mismatch in provided new password")
+        return render_template('profile.html', user=session, error_message="The entered new password does not match the password confirmation!")
+    else:
+        print("[+] New passwords matched! Changing password...")
+
+    # Confirming whether or not the current provided password matches the stored one
+    conn = createDBConnection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT password FROM users WHERE id = ?', (userID))
+    result = cursor.fetchone()
+    password = result[0]
+    
+    if password == currentPassword:
+        print("[+] Current password matches! Changing password...")
+    else:
+        print("[!] Current password doesn't match!")
+        return render_template('profile.html', user=session, error_message="The inputted password does not match the stored password!")
+
+    # Performing password change
+    cursor.execute('UPDATE users SET password = ? WHERE id = ? AND password = ?', (newPassword, userID, currentPassword))
+    conn.commit()
+    conn.close()
+    return render_template('profile.html', user=session, success_message="Password updated!")
 
 @app.route("/settings", methods=['GET'])
 def settings():
