@@ -6,10 +6,10 @@ Password Manager Project For Class
 
 - [x] Login functionality
 
-- [] Dashboard functionality
+- [x] Dashboard functionality
 
 * ~~Need to modify the current dashboard to display user's saved passwords~~
-* Need to modify background of dashboard to match overall website theme
+* ~~Need to modify background of dashboard to match overall website theme~~
 
 - [x] Registration functionality
 

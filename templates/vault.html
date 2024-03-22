@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quantum Password Manager</title>
     <!-- Include Tailwind CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
     <style>
        /* Custom CSS for dropdown menu */
         .dropdown-menu {
@@ -19,7 +19,18 @@
             display: block;
         }
         body {
-            background-color: #005bb6; /* Change background color to a darker shade */
+            background-color: #2C3E50; /* Change background color to a darker shade */
+            color: #ffffff;
+        }
+
+        .bg-custom-color {
+            background-color: #2C3E50;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        textarea {
+            color: #000000; /* Change this to the color you desire */
         }
 
         .passwordMenu {
@@ -39,7 +50,7 @@
         }
     </style>
 </head>
-<body class="bg-gray-200">
+<body class="bg-custom-color">
     <!-- Navigation bar -->
     <nav class="bg-blue-500 p-4">
         <div class="container mx-auto flex justify-between items-center relative">
@@ -97,7 +108,7 @@
         <div class="bg-white p-4 rounded-lg shadow">
             <div class="flex justify-between items-center mb-2">
                 <div>
-                    <p class="font-semibold">Website: {{ entry[0] }}</p>
+                    <p class="text-sm text-black font-semibold">Website: {{ entry[0] }}</p>
                     <p class="text-sm text-gray-600">Username: {{ entry[1] }}</p>
                 </div>
                 <div>
@@ -114,7 +125,7 @@
         {% endfor %}
     </div>
 
-    <div id="passwordMenu" class="hidden absolute z-10 right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+    <div id="passwordMenu" class="hidden absolute z-10 right-0 mt-2 w-72 rounded-md shadow-lg bg-white ring-2 ring-black ring-opacity-5">
         <form method="POST" action="/add-password">
             <div>
                 <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
