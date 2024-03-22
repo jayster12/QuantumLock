@@ -19,7 +19,7 @@ def closeDBConnection(exception=None):
 def index():
     return render_template("index.html")
 
-@app.route('/generate', methods=['GET'])
+@app.route('/generator', methods=['GET'])
 def generatePassword():
     return render_template('passwordgenerator.html')
 
@@ -122,7 +122,9 @@ def login():
 @app.route("/profile", methods=['GET'])
 def profile():
     if request.method == 'GET':
-        return render_template('profile.html')
+        #return render_template('profile.html', username=session['username'], email=session['email'])
+        return render_template('profile.html', user=session)
+        #return render_template('profile.html')
 
 
 @app.route("/settings", methods=['GET'])

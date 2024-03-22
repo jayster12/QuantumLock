@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Manager - Profile</title>
+    <title>QuantumLock - Profile</title>
     <!-- Include Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
@@ -16,11 +16,11 @@
     <!-- Navigation bar -->
     <nav class="bg-blue-500 p-4">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-white font-semibold">Password Manager</h1>
+            <h1 class="text-white font-semibold">QuantumLock</h1>
             <!-- Dropdown menu for navigation links -->
             <div class="relative">
                 <button class="text-white hover:text-gray-200 focus:outline-none">
-                    Welcome!
+                    Welcome, {{ user['username'] }}
                     <svg class="h-4 w-4 fill-current inline-block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 7.293a1 1 0 0 1 1.414-1.414L10 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414l-5 5a1 1 0 0 1-1.414 0l-5-5a1 1 0 0 1-.001-1.414z"/></svg>
                         <path fill-rule="evenodd" d="M10 12l-4-4H6l4 4 4-4h.001l-.001-.001L14 8l-4 4z" clip-rule="evenodd" />
                     </svg>
@@ -30,6 +30,7 @@
                     <a href="/dashboard" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Dashboard</a>
                     <a href="/settings" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Settings</a>
                     <a href="/generator" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Password Generator</a>
+                    <a href="/logout" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Logout</a>
                 </div>
             </div>
         </div>
@@ -40,11 +41,11 @@
         <div class="max-w-md mx-auto bg-white rounded-lg overflow-hidden shadow-md">
             <div class="px-6 py-4">
                 <div class="flex justify-center">
-                    <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Profile Picture" class="h-24 w-24 rounded-full">
+                    <img src="https://svgur.com/i/146b.svg" alt="Profile Picture" class="h-24 w-24 rounded-full">
                 </div>
                 <div class="text-center mt-4">
-                    <h2 class="text-lg font-semibold">John Doe</h2>
-                    <p class="text-gray-600">john.doe@example.com</p>
+                    <h2 class="text-lg font-semibold">{{ user['username'] }}</h2>
+                    <p class="text-gray-600">{{ user['email'] }}</p>
                 </div>
             </div>
             <div class="bg-gray-100 px-6 py-4">

@@ -66,7 +66,7 @@
                     <a href="/profile" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Profile</a>
                     <a href="/settings" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Settings</a>
                     <a href="/logout" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Logout</a>
-                    <a href="/generate" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Password Generator</a>
+                    <a href="/generator" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Password Generator</a>
                 </div>
             </div>
         </div>
@@ -74,17 +74,10 @@
     
     <!-- Main content area -->
     <div class="container mx-auto mt-4">
-        <!-- User info -->
-        <div class="mb-8">
-            <h2 class="text-lg font-semibold mb-2">User Info</h2>
-            <p><span class="font-semibold">Email:</span> {{ username }}</p>
-            <p><span class="font-semibold">Username:</span> {{ email }}</p>
-        </div>
-        
         <!-- Passwords -->
         <div>
             <h2 class="text-lg font-semibold mb-2 flex justify-between items-center">
-                Stored Passwords
+                Passwords
                 <button id="addPasswordBtn" class="bg-blue-500 text-white px-3 py-1 rounded-full focus:outline-none">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -102,7 +95,7 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="passwordList">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-8" id="passwordList">
         <!-- Password items will be dynamically generated here by Flask -->
         {% for entry in passEntries %}
         <div class="bg-white p-4 rounded-lg shadow">
@@ -125,7 +118,7 @@
         {% endfor %}
     </div>
 
-    <div id="passwordMenu" class="hidden absolute z-10 right-0 mt-2 w-72 rounded-md shadow-lg bg-white ring-2 ring-black ring-opacity-5">
+    <div id="passwordMenu" class="hidden absolute z-10 right-0 mt-2 w-72 p-6 rounded-md shadow-lg bg-white ring-2 ring-black ring-opacity-5">
         <form method="POST" action="/add-password">
             <div>
                 <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
