@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Password Generator</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    * {box-sizing: border-box;}
+body {font-family:Verdana, Arial, sans-serif;
+  background-image: url(AA.jpg);
+     background-repeat: repeat; 
+}
+body {
+  margin:0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#wrapper { background-color: #ddd; 
+           color: rgb(247, 225, 225);
+           width: 70%;
+		   margin: auto;
+           min-width: 960px;
+		   max-width: 1200px;
+} 
+.topnav {
+  overflow: hidden;
+  background-color: #3e444a;
+}
+.topnav a {
+  float: left;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #f8f9fa;
+  color: white;
+}
+
+.topnav a.active {
+  background-color: #abd8fc;
+  color: white;
+}
+.topnav .search-container {
+  float: right;
+}
+.topnav a.active {
+  background-color: #9fd0f9;
+  color: white;
+}
+.topnav .search-container {
+  float: right;
+}
+.topnav .search-container button {
+  float: right;
+  padding: 6px 10px;
+  margin-top: 8px;
+  margin-right: 16px;
+  background: #ddd;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+}
+header { background-color: none;
+        color: #ddd; 
+        font-size: 120%; 
+        padding: 35px 35px 35px 500px;
+		background-image: url(ggg.png); 
+		background-repeat: no-repeat;
+}
+.topnav .search-container button:hover {
+  background: #ddd;
+}
+@media screen and (max-width: 600px) {
+  .topnav .search-container {
+    float: none;
+  }
+  .topnav a, .topnav input[type=text], .topnav .search-container button {
+    float: none;
+    display: block;
+    text-align: left;
+    width: 100%;
+    margin: 0;
+    padding: 14px;
+  }
+  .topnav input[type=text] {
+    border: 1px solid #ddd;  
+  }
+  #floatright { margin: 10px;
+              float: right;
+}
+  footer { font-size:88%;
+         text-align: center;
+		 clear: right;
+         padding: 20px;
+		 background-color: none; 
+}
+}
+.fa-reddit {
+  background: #ff5700;
+  color: orange;
+}
+.fa-twitter {
+  background: #78c1f9;
+  color: rgb(252, 251, 251);
+}
+.fa-facebook {
+  background: #2b2bd3;
+  color: white;
+}
+
+.fa {
+  padding: 0px;
+  font-size: 20px;
+  width: 40px;
+  text-align: center;
+  text-decoration: none;
+  margin: 5px 2px;
+  border-radius:0%;
+}
+form { background-color:#ddd;
+	   font-family: Arial, sans-serif;
+       padding: 10px;
+       min-width: 400px;	}
+       input, textarea { margin-top: 10px;}
+  </style>
+  <link rel="shortcut icon" type="image/jpg" href="Logo icon 1.png"/>
+</head>
+<body>
+  <div id="wrapper">
+    <header>
+      <h1>QuantumLock</h1>
+      <span>Password Manager</span>
+      <nav>
+        <div class="topnav">
+          <ul>
+            <li><a class="active" href="#home.html">Home</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="Quantum Lock contact.html">Information</a></li>
+          </ul>
+          <div class="search-container">
+            <form action="/action_page.php">
+              <input type="text" placeholder="Search.." name="search">
+              <button type="submit"><i class="fa fa-search"></i></button>
+            </form>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+
+  <div class="max-w-md mx-auto p-8 bg-white rounded-box shadow-md">
+    <h1 class="text-2xl font-semibold mb-4">Password Generator</h1>
+    <div class="flex items-center mb-4">
+      <label for="password-length" class="mr-4">Password Length:</label>
+      <input type="range" id="password-length" min="4" max="30" value="12" class="flex-1 appearance-none w-full bg-gray-200 h-2 rounded-full outline-none">
+      <span id="password-length-output" class="ml-4 font-semibold">12</span>
+    </div>
+    <button id="generate-btn" class="bg-blue-500 text-white px-4 py-2 rounded font-semibold hover:bg-blue-600 transition-colors mb-4">Generate Password</button>
+    <div class="flex items-center">
+      <input type="text" id="generated-password" class="w-full p-2 bg-gray-200 rounded mr-2" readonly>
+      <button id="copy-btn" class="bg-blue-500 text-white px-4 py-2 rounded font-semibold hover:bg-blue-600 transition-colors">Copy</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2024 QuantumLock All Rights Reserved</p>
+  </footer>
+
+</style>
+<!-- Include Font Awesome CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!-- Facebook icon with a link -->
+<a href="https://www.facebook.com/your-account" class="fa fa-facebook"></a>
+
+<!-- Include Font Awesome CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!-- Twitter icon with a link -->
+<a href="https://www.Twitter.com/your-account" class="fa-twitter"></a>
+
+<!-- Include Font Awesome CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!-- Instagram icon with a link -->
+<a href="https://www.instagram.com/your-account" class= "fa fa-instagram"></a>
+
+<!-- Include Font Awesome CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<!-- Reddit  icon with a link -->
+<a href="https://www.Reddit.com/your-account" class="fa-reddit"></a>
+</div>
+</body>
+</html>   
